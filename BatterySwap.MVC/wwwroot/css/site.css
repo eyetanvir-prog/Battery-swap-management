@@ -1,0 +1,338 @@
+html {
+  font-size: 13px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #17212b;
+  font-size: 0.92rem;
+}
+
+.app-main {
+  min-height: calc(100vh - 7.5rem);
+}
+
+.app-content-header {
+  padding: 0.75rem 0.5rem 0;
+}
+
+.app-content {
+  padding: 0 0.5rem 0.75rem;
+}
+
+.app-header .nav-link,
+.app-sidebar .nav-link,
+.breadcrumb,
+.brand-text {
+  font-size: 0.9rem;
+}
+
+.app-sidebar .nav-link.active,
+.app-sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.small-box .small-box-icon {
+  opacity: 0.24;
+}
+
+.compact-box {
+  margin-bottom: 0.75rem;
+}
+
+.compact-box .inner {
+  padding: 0.85rem 1rem;
+}
+
+.compact-box h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.15rem;
+}
+
+.compact-box p,
+.compact-box small {
+  font-size: 0.8rem;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+
+.login-box-msg {
+  font-size: 0.95rem;
+}
+
+.login-hero-card {
+  background:
+    radial-gradient(circle at top left, rgba(13, 110, 253, 0.14), transparent 42%),
+    linear-gradient(180deg, #ffffff 0%, #f6f9fc 100%);
+}
+
+.login-kicker {
+  color: #0d6efd;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.9rem;
+}
+
+.login-hero-title {
+  font-size: 1.75rem;
+  line-height: 1.18;
+  margin-bottom: 1rem;
+}
+
+.login-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.login-demo-card {
+  border: 1px solid rgba(23, 33, 43, 0.08);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 0.8rem 0.9rem;
+}
+
+.login-note-list {
+  display: grid;
+  gap: 0.65rem;
+  font-size: 0.84rem;
+}
+
+.timeline-note {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.dashboard-highlight {
+  margin-bottom: 0.75rem;
+  min-height: 90px;
+}
+
+.dashboard-highlight .info-box-icon {
+  width: 56px;
+  font-size: 1.2rem;
+}
+
+.dashboard-highlight .info-box-number {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.dashboard-highlight-note {
+  color: #6c757d;
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.dashboard-note-list {
+  display: grid;
+  gap: 0.6rem;
+  font-size: 0.83rem;
+}
+
+.dashboard-chart-wrap {
+  position: relative;
+  min-height: 320px;
+}
+
+.error-page-wrap {
+  min-height: calc(100vh - 8rem);
+}
+
+.error-code-display {
+  color: #dc3545;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.8rem;
+}
+
+.error-page-title {
+  font-size: 1.55rem;
+  margin-bottom: 0.75rem;
+}
+
+.report-shell {
+  margin-bottom: 0.75rem;
+}
+
+.report-stat {
+  background: linear-gradient(180deg, #f8f9fa 0%, #eef2f6 100%);
+  border: 1px solid rgba(23, 33, 43, 0.08);
+  border-radius: 0.75rem;
+  padding: 0.9rem 0.95rem;
+  height: 100%;
+}
+
+.report-stat-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.report-stat-label {
+  color: #5c6773;
+  font-size: 0.78rem;
+  margin-top: 0.2rem;
+}
+
+.list-group-item {
+  border-left: 0;
+  border-right: 0;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.card-header,
+.card-body,
+.card-footer {
+  padding: 0.75rem 0.9rem;
+}
+
+.btn {
+  --bs-btn-padding-y: 0.34rem;
+  --bs-btn-padding-x: 0.68rem;
+  --bs-btn-font-size: 0.84rem;
+}
+
+.btn-xs {
+  --bs-btn-padding-y: 0.2rem;
+  --bs-btn-padding-x: 0.5rem;
+  --bs-btn-font-size: 0.76rem;
+}
+
+.form-control,
+.form-select {
+  font-size: 0.85rem;
+  min-height: calc(1.8em + 0.55rem + 2px);
+}
+
+.table > :not(caption) > * > * {
+  padding: 0.5rem 0.65rem;
+}
+
+table.dataTable.table-sm > tbody > tr > th,
+table.dataTable.table-sm > tbody > tr > td,
+table.dataTable.table-sm > thead > tr > th {
+  padding: 0.45rem 0.6rem;
+}
+
+div.dt-container div.dt-layout-row {
+  margin: 0.35rem 0;
+}
+
+div.dt-container div.dt-layout-cell {
+  padding: 0;
+}
+
+div.dt-container .dt-search input,
+div.dt-container .dt-length select {
+  font-size: 0.82rem;
+  padding: 0.25rem 0.5rem;
+}
+
+div.dt-container .dt-search input {
+  min-width: 180px;
+}
+
+div.dt-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+div.dt-buttons .btn {
+  margin-right: 0;
+}
+
+.dt-paging .pagination {
+  --bs-pagination-padding-y: 0.22rem;
+  --bs-pagination-padding-x: 0.55rem;
+  --bs-pagination-font-size: 0.8rem;
+}
+
+.badge {
+  font-size: 0.72rem;
+  padding: 0.35em 0.55em;
+}
+
+.station-map {
+  height: 520px;
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.map-popup {
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+@media print {
+  .app-header,
+  .app-sidebar,
+  .app-footer,
+  .no-print,
+  .dt-buttons,
+  .dt-search,
+  .dt-length,
+  .dt-paging,
+  .dt-info {
+    display: none !important;
+  }
+
+  .app-main,
+  .app-content,
+  .container-fluid,
+  .card,
+  .card-body {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  body {
+    background: #fff !important;
+    font-size: 12px;
+  }
+
+  .app-wrapper,
+  .app-main {
+    margin: 0 !important;
+    min-height: auto !important;
+  }
+
+  .report-shell,
+  .report-stat,
+  .card {
+    border: 1px solid #d9dee3 !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .login-demo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .login-hero-title {
+    font-size: 1.45rem;
+  }
+}

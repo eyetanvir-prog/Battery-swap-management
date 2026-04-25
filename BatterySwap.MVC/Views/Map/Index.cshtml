@@ -1,0 +1,94 @@
+@model BatterySwap.MVC.Models.StationListViewModel
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Station Map";
+    var mapStations = Model.Stations
+        .Where(x => x.Latitude.HasValue && x.Longitude.HasValue)
+        .Select(x => new
+        {
+            x.StationName,
+            x.StationCode,
+            x.Address,
+            x.AvailableBatteries,
+            x.TotalBatteries,
+            x.EmployeeName,
+            x.Status,
+            Latitude = x.Latitude!.Value,
+            Longitude = x.Longitude!.Value
+        })
+        .ToList();
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Station Map</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Map</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="card card-outline card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Live Station Locations</h3>
+            </div>
+            <div class="card-body">
+                <div id="stationMap" class="station-map" data-stations='@Html.Raw(JsonSerializer.Serialize(mapStations))'></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+}
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        (() => {
+            const mapElement = document.getElementById("stationMap");
+            if (!mapElement || typeof L === "undefined") {
+                return;
+            }
+
+            const stations = JSON.parse(mapElement.dataset.stations || "[]");
+            const map = L.map(mapElement).setView([23.8103, 90.4125], 11);
+
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            const bounds = [];
+
+            stations.forEach((station) => {
+                const marker = L.marker([station.Latitude, station.Longitude]).addTo(map);
+                marker.bindPopup(`
+                    <div class="map-popup">
+                        <strong>${station.StationName}</strong><br>
+                        Code: ${station.StationCode}<br>
+                        Address: ${station.Address}<br>
+                        Batteries: ${station.AvailableBatteries}/${station.TotalBatteries}<br>
+                        Employee: ${station.EmployeeName}<br>
+                        Status: ${station.Status}
+                    </div>
+                `);
+                bounds.push([station.Latitude, station.Longitude]);
+            });
+
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [20, 20] });
+            }
+        })();
+    </script>
+}

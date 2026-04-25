@@ -1,0 +1,99 @@
+@model BatterySwap.MVC.Models.CreateEmployeeViewModel
+@{
+    ViewData["Title"] = "Create Employee";
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Add Employee</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Employee" asp-action="Index">Employees</a></li>
+                    <li class="breadcrumb-item active">Create</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card card-outline card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Employee Registration</h3>
+                    </div>
+                    <div class="card-body">
+                        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                        {
+                            <div class="alert alert-danger">@Model.ErrorMessage</div>
+                        }
+
+                        <form asp-action="Create" method="post">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label asp-for="Name" class="form-label"></label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Phone" class="form-label"></label>
+                                    <input asp-for="Phone" class="form-control" />
+                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="NID" class="form-label"></label>
+                                    <input asp-for="NID" class="form-control" />
+                                    <span asp-validation-for="NID" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="StationId" class="form-label"></label>
+                                    <select asp-for="StationId" class="form-select">
+                                        <option value="">Select a station</option>
+                                        @foreach (var station in Model.Stations)
+                                        {
+                                            <option value="@station.Id">@station.Label</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="StationId" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Username" class="form-label"></label>
+                                    <input asp-for="Username" class="form-control" />
+                                    <span asp-validation-for="Username" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Password" class="form-label"></label>
+                                    <input asp-for="Password" class="form-control" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="JoiningDate" class="form-label"></label>
+                                    <input asp-for="JoiningDate" class="form-control" />
+                                    <span asp-validation-for="JoiningDate" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label asp-for="Address" class="form-label"></label>
+                                    <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="mt-4 d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">Create Employee</button>
+                                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

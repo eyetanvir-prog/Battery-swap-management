@@ -1,0 +1,115 @@
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Battery Swap Station Management System";
+    var isLoggedIn = !string.IsNullOrWhiteSpace(Context.Session.GetString("AuthToken"));
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Project Dashboard</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-primary">
+                    <div class="inner">
+                        <h3>3</h3>
+                        <p>User Roles</p>
+                    </div>
+                    <i class="small-box-icon bi bi-people"></i>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-success">
+                    <div class="inner">
+                        <h3>8</h3>
+                        <p>System Modules</p>
+                    </div>
+                    <i class="small-box-icon bi bi-grid"></i>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-warning">
+                    <div class="inner">
+                        <h3>7</h3>
+                        <p>Database Tables</p>
+                    </div>
+                    <i class="small-box-icon bi bi-database"></i>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box text-bg-danger">
+                    <div class="inner">
+                        <h3>140</h3>
+                        <p>Cost Per Swap (Tk)</p>
+                    </div>
+                    <i class="small-box-icon bi bi-battery-charging"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <section class="col-lg-8">
+                <div class="card card-outline card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Battery Swap Station Management System</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-4">
+                            This starter dashboard now uses the free AdminLTE 4 template structure with the MVC app as the
+                            presentation layer and the API exposed directly through Swagger.
+                        </p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge text-bg-dark">ASP.NET Core 10</span>
+                            <span class="badge text-bg-secondary">SQL Server 2022</span>
+                            <span class="badge text-bg-primary">Docker Compose</span>
+                            <span class="badge text-bg-success">Swagger Ready</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        @if (isLoggedIn)
+                        {
+                            <span class="btn btn-success disabled">Authenticated Session Active</span>
+                        }
+                        else
+                        {
+                            <a class="btn btn-dark" asp-controller="Account" asp-action="Login">Open Login</a>
+                        }
+                        <a class="btn btn-outline-primary ms-2" href="http://localhost:8081" target="_blank" rel="noreferrer">Open API Swagger</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="col-lg-4">
+                <div class="card card-outline card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Implementation Status</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Solution scaffolded</li>
+                            <li class="list-group-item">Domain entities and migration created</li>
+                            <li class="list-group-item">Admin seed configuration added</li>
+                            <li class="list-group-item">API login endpoint added</li>
+                            <li class="list-group-item">MVC login page added</li>
+                            <li class="list-group-item">AdminLTE layout applied</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

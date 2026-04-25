@@ -1,0 +1,71 @@
+services:
+  batteryswap-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: batteryswap-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Your_strong_password123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P $$SA_PASSWORD -C -Q \"SELECT 1\" || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  batteryswap-api:
+    build:
+      context: .
+      dockerfile: BatterySwap.API/Dockerfile
+    container_name: batteryswap-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=batteryswap-db;Database=BatterySwapDB;User Id=sa;Password=Your_strong_password123;TrustServerCertificate=True;Encrypt=False"
+      Jwt__Key: "super-secret-jwt-key-minimum-32-chars"
+      Jwt__Issuer: "BatterySwapAPI"
+      Jwt__Audience: "BatterySwapClients"
+      Jwt__ExpiryMinutes: "60"
+      AdminSeed__Name: "System Administrator"
+      AdminSeed__Phone: "01700000000"
+      AdminSeed__Email: "admin@batteryswap.local"
+      AdminSeed__Password: "Admin123!"
+    depends_on:
+      batteryswap-db:
+        condition: service_healthy
+    ports:
+      - "8081:80"
+    volumes:
+      - photos-volume:/app/wwwroot/uploads
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  batteryswap-mvc:
+    build:
+      context: .
+      dockerfile: BatterySwap.MVC/Dockerfile
+    container_name: batteryswap-mvc
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ApiSettings__BaseUrl: "http://batteryswap-api"
+    depends_on:
+      batteryswap-api:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  sqlserver-data:
+  photos-volume:

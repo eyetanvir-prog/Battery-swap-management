@@ -1,0 +1,117 @@
+@model BatterySwap.MVC.Models.ProcessSwapViewModel
+@{
+    ViewData["Title"] = "Process Swap";
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Process Battery Swap</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Swap Desk</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="row g-3">
+            <div class="col-lg-4">
+                <div class="card card-outline card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Find Client</h3>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Process" method="get">
+                            <div class="mb-3">
+                                <label asp-for="SearchPhone" class="form-label"></label>
+                                <input asp-for="SearchPhone" class="form-control" placeholder="01822000001" />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                @if (TempData["SuccessMessage"] is string successMessage)
+                {
+                    <div class="alert alert-success py-2">@successMessage</div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                {
+                    <div class="alert alert-danger py-2">@Model.ErrorMessage</div>
+                }
+
+                @if (Model.Client is not null)
+                {
+                    <div class="card card-outline card-success">
+                        <div class="card-header">
+                            <h3 class="card-title">Client Swap Details</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <div class="small text-muted">Client</div>
+                                    <div class="fw-semibold">@Model.Client.Name</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="small text-muted">Current Battery</div>
+                                    <div class="fw-semibold">@Model.Client.CurrentBatteryCode</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="small text-muted">Balance</div>
+                                    <div class="fw-semibold">@Model.Client.BalanceDisplay</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="small text-muted">Vehicle</div>
+                                    <div class="fw-semibold">@Model.Client.VehicleType</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="small text-muted">Vehicle Number</div>
+                                    <div class="fw-semibold">@Model.Client.VehicleNumber</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="small text-muted">Status</div>
+                                    <div class="fw-semibold">@Model.Client.Status</div>
+                                </div>
+                            </div>
+
+                            <form asp-action="Process" method="post">
+                                <input asp-for="SearchPhone" type="hidden" />
+                                <input asp-for="ClientId" type="hidden" value="@Model.Client.Id" />
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-8">
+                                        <label asp-for="AssignedBatteryId" class="form-label"></label>
+                                        <select asp-for="AssignedBatteryId" class="form-select">
+                                            <option value="">Select an available battery</option>
+                                            @foreach (var battery in Model.AvailableBatteries)
+                                            {
+                                                <option value="@battery.Id">@battery.BatteryCode</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="AssignedBatteryId" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-4 d-grid">
+                                        <button type="submit" class="btn btn-success">Complete Swap</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

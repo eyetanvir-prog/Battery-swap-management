@@ -1,0 +1,93 @@
+@model BatterySwap.MVC.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center py-5">
+            <div class="col-xl-9">
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-lg-5">
+                        <div class="card card-outline card-primary shadow-sm h-100 login-hero-card">
+                            <div class="card-body">
+                                <div class="login-kicker">Battery Swap Station Management System</div>
+                                <h1 class="login-hero-title">Sign in to manage stations, swaps, clients, and reports.</h1>
+                                <p class="text-muted mb-4">
+                                    This demo environment uses live API-backed data, compact AdminLTE pages, DataTables, reports, and operational dashboards.
+                                </p>
+                                <div class="login-demo-grid">
+                                    <div class="login-demo-card">
+                                        <div class="small text-muted mb-1">Admin Demo</div>
+                                        <div><strong>admin@batteryswap.local</strong></div>
+                                        <div><code>Admin123!</code></div>
+                                    </div>
+                                    <div class="login-demo-card">
+                                        <div class="small text-muted mb-1">Employee Demo</div>
+                                        <div><strong>arif.h</strong></div>
+                                        <div><code>Employee123!</code></div>
+                                    </div>
+                                </div>
+                                <div class="login-note-list mt-4">
+                                    <div><i class="bi bi-check2-circle text-success me-2"></i>Admin users can manage stations, employees, batteries, and reports.</div>
+                                    <div><i class="bi bi-check2-circle text-success me-2"></i>Employee users can register clients, recharge wallets, and process swaps.</div>
+                                    <div><i class="bi bi-check2-circle text-success me-2"></i>Swagger is available from the sidebar for API review.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="card card-outline card-primary shadow-sm">
+                            <div class="card-header text-center">
+                                <h2 class="h4 mb-0">BatterySwap Login</h2>
+                            </div>
+                            <div class="card-body">
+                                <p class="login-box-msg text-muted">
+                                    Use an admin email or employee username to continue.
+                                </p>
+
+                                @if (!string.IsNullOrWhiteSpace(Model.InfoMessage))
+                                {
+                                    <div class="alert alert-info py-2">@Model.InfoMessage</div>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                                {
+                                    <div class="alert alert-danger py-2">@Model.ErrorMessage</div>
+                                }
+
+                                <form asp-action="Login" method="post">
+                                    <input asp-for="ReturnUrl" type="hidden" />
+                                    <div class="input-group mb-3">
+                                        <input asp-for="UsernameOrEmail" class="form-control" placeholder="Email or username" />
+                                        <div class="input-group-text">
+                                            <span class="bi bi-person"></span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="UsernameOrEmail" class="text-danger d-block mb-2"></span>
+
+                                    <div class="input-group mb-3">
+                                        <input asp-for="Password" class="form-control" placeholder="Password" />
+                                        <div class="input-group-text">
+                                            <span class="bi bi-lock-fill"></span>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="Password" class="text-danger d-block mb-3"></span>
+
+                                    <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center small text-muted">
+                                Session timeout is set to <strong>30 minutes</strong> of inactivity.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

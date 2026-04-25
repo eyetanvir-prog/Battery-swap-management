@@ -1,0 +1,177 @@
+@model BatterySwap.MVC.Models.ReportSummaryViewModel
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="app-content-header no-print">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Report Center</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Reports</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content report-page">
+    <div class="container-fluid">
+        <div class="card card-outline card-dark report-shell">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h3 class="card-title mb-1">@Model.ScopeLabel</h3>
+                    <div class="text-muted small">Printable operational summary for presentation and review</div>
+                </div>
+                <button type="button" class="btn btn-dark btn-sm no-print" onclick="window.print()">
+                    <i class="bi bi-printer me-1"></i>Print Report
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4 col-xl-2">
+                        <div class="report-stat">
+                            <div class="report-stat-value">@Model.StationCount</div>
+                            <div class="report-stat-label">Stations</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xl-2">
+                        <div class="report-stat">
+                            <div class="report-stat-value">@Model.TotalSwaps</div>
+                            <div class="report-stat-label">Swaps</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xl-2">
+                        <div class="report-stat">
+                            <div class="report-stat-value">@Model.TotalSwapRevenue.ToString("0.##")</div>
+                            <div class="report-stat-label">Swap Revenue</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xl-2">
+                        <div class="report-stat">
+                            <div class="report-stat-value">@Model.TotalRecharges</div>
+                            <div class="report-stat-label">Recharges</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xl-2">
+                        <div class="report-stat">
+                            <div class="report-stat-value">@Model.TotalRechargeAmount.ToString("0.##")</div>
+                            <div class="report-stat-label">Recharge Amount</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xl-2">
+                        <div class="report-stat">
+                            <div class="report-stat-value">@Model.LowAvailabilityStations</div>
+                            <div class="report-stat-label">Low Stock Stations</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-xl-5">
+                        <div class="card card-outline card-info h-100">
+                            <div class="card-header">
+                                <h3 class="card-title">Station Stock Snapshot</h3>
+                            </div>
+                            <div class="card-body table-responsive">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Station</th>
+                                            <th>Available</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var station in Model.StationStocks)
+                                        {
+                                            <tr>
+                                                <td>@station.StationName</td>
+                                                <td>@station.AvailableBatteries</td>
+                                                <td>@station.TotalBatteries</td>
+                                                <td>@station.Status</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-7">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="card card-outline card-danger">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Recent Swaps</h3>
+                                    </div>
+                                    <div class="card-body table-responsive">
+                                        <table class="table table-sm align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Client</th>
+                                                    <th>Station</th>
+                                                    <th>Assigned Battery</th>
+                                                    <th>Cost</th>
+                                                    <th>Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.RecentSwaps)
+                                                {
+                                                    <tr>
+                                                        <td>@item.ClientName</td>
+                                                        <td>@item.StationName</td>
+                                                        <td>@item.AssignedBatteryCode</td>
+                                                        <td>@item.SwapCost</td>
+                                                        <td>@item.SwapTime</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="card card-outline card-warning">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Recent Recharges</h3>
+                                    </div>
+                                    <div class="card-body table-responsive">
+                                        <table class="table table-sm align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Client</th>
+                                                    <th>Station</th>
+                                                    <th>Amount</th>
+                                                    <th>Added By</th>
+                                                    <th>Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.RecentRecharges)
+                                                {
+                                                    <tr>
+                                                        <td>@item.ClientName</td>
+                                                        <td>@item.StationName</td>
+                                                        <td>@item.Amount</td>
+                                                        <td>@item.AddedBy</td>
+                                                        <td>@item.RechargeTime</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

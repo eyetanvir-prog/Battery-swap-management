@@ -1,0 +1,91 @@
+@model BatterySwap.MVC.Models.CreateClientViewModel
+@{
+    ViewData["Title"] = "Register Client";
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Register Client</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Client" asp-action="Index">Clients</a></li>
+                    <li class="breadcrumb-item active">Create</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card card-outline card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Client Registration</h3>
+                    </div>
+                    <div class="card-body">
+                        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                        {
+                            <div class="alert alert-danger">@Model.ErrorMessage</div>
+                        }
+
+                        <form asp-action="Create" method="post">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label asp-for="Name" class="form-label"></label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Phone" class="form-label"></label>
+                                    <input asp-for="Phone" class="form-control" />
+                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="NID" class="form-label"></label>
+                                    <input asp-for="NID" class="form-control" />
+                                    <span asp-validation-for="NID" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="VehicleType" class="form-label"></label>
+                                    <select asp-for="VehicleType" class="form-select">
+                                        <option value="">Select vehicle type</option>
+                                        <option value="Rickshaw">Rickshaw</option>
+                                        <option value="Bike">Bike</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <span asp-validation-for="VehicleType" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="VehicleNumber" class="form-label"></label>
+                                    <input asp-for="VehicleNumber" class="form-control" />
+                                    <span asp-validation-for="VehicleNumber" class="text-danger"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label asp-for="Address" class="form-label"></label>
+                                    <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="alert alert-light border mt-4 mb-0">
+                                New clients start with a balance of <strong>1,000 Tk</strong>.
+                            </div>
+                            <div class="mt-4 d-flex gap-2">
+                                <button type="submit" class="btn btn-success">Register Client</button>
+                                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

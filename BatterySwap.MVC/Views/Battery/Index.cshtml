@@ -1,0 +1,85 @@
+@using Microsoft.AspNetCore.Http
+@model BatterySwap.MVC.Models.BatteryListViewModel
+@{
+    ViewData["Title"] = "Batteries";
+    var isAdmin = string.Equals(Context.Session.GetString("UserRole"), "Admin", StringComparison.OrdinalIgnoreCase);
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Batteries</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Batteries</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="card card-outline card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">Battery Tracking</h3>
+                @if (isAdmin)
+                {
+                    <div class="card-tools">
+                        <a asp-action="Create" class="btn btn-secondary btn-xs">Add Battery</a>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                @if (TempData["SuccessMessage"] is string successMessage)
+                {
+                    <div class="alert alert-success py-2">@successMessage</div>
+                }
+                @if (TempData["ErrorMessage"] is string errorMessage)
+                {
+                    <div class="alert alert-danger py-2">@errorMessage</div>
+                }
+                <div class="table-responsive">
+                    <table id="batteryTable" class="table table-hover table-sm align-middle w-100 js-datatable" data-page-length="10" data-export-title="Batteries">
+                        <thead>
+                            <tr>
+                                <th>Battery Code</th>
+                                <th>Station</th>
+                                <th>Status</th>
+                                <th>Current Holder</th>
+                                <th>Last Updated</th>
+                                @if (isAdmin)
+                                {
+                                    <th>Actions</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var battery in Model.Batteries)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@battery.BatteryCode</td>
+                                    <td>@battery.StationName</td>
+                                    <td>
+                                        <span class="badge @(battery.Status == "Available" ? "text-bg-success" : "text-bg-warning")">@battery.Status</span>
+                                    </td>
+                                    <td>@battery.CurrentClientName</td>
+                                    <td>@battery.LastUpdated</td>
+                                    @if (isAdmin)
+                                    {
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@battery.Id" class="btn btn-outline-secondary btn-xs">Edit</a>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

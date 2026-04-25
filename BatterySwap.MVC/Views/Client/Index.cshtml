@@ -1,0 +1,91 @@
+@model BatterySwap.MVC.Models.ClientListViewModel
+@{
+    ViewData["Title"] = "Clients";
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Clients</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Clients</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="card card-outline card-success">
+            <div class="card-header">
+                <h3 class="card-title">Client Management</h3>
+                <div class="card-tools">
+                    <a asp-action="Create" class="btn btn-success btn-xs">Register Client</a>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (TempData["SuccessMessage"] is string successMessage)
+                {
+                    <div class="alert alert-success py-2">@successMessage</div>
+                }
+                @if (TempData["ErrorMessage"] is string errorMessage)
+                {
+                    <div class="alert alert-danger py-2">@errorMessage</div>
+                }
+                <div class="table-responsive">
+                    <table id="clientTable" class="table table-hover table-sm align-middle w-100 js-datatable" data-page-length="10" data-export-title="Clients">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Phone</th>
+                                <th>Vehicle</th>
+                                <th>Vehicle Number</th>
+                                <th>Battery</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var client in Model.Clients)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@client.Name</td>
+                                    <td>@client.Phone</td>
+                                    <td>@client.VehicleType</td>
+                                    <td>@client.VehicleNumber</td>
+                                    <td>@client.CurrentBatteryCode</td>
+                                    <td>@client.Balance</td>
+                                    <td>
+                                        <span class="badge @(client.IsInactive ? "text-bg-secondary" : client.DisplayStatus == "Low Balance" ? "text-bg-warning" : "text-bg-success")">
+                                            @client.DisplayStatus
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1">
+                                            <a asp-action="Profile" asp-route-id="@client.Id" class="btn btn-outline-secondary btn-xs">View</a>
+                                            <a asp-action="Edit" asp-route-id="@client.Id" class="btn btn-outline-success btn-xs">Edit</a>
+                                            <a asp-action="Recharge" asp-route-id="@client.Id" class="btn btn-outline-warning btn-xs">Recharge</a>
+                                            @if (!client.IsInactive)
+                                            {
+                                                <form asp-action="Deactivate" asp-route-id="@client.Id" method="post" onsubmit="return confirm('Deactivate this client?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-outline-danger btn-xs">Deactivate</button>
+                                                </form>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

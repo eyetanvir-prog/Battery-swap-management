@@ -1,0 +1,102 @@
+@model BatterySwap.MVC.Models.ClientProfileViewModel
+@{
+    ViewData["Title"] = "Client Profile";
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Client Profile</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Client" asp-action="Index">Clients</a></li>
+                    <li class="breadcrumb-item active">@Model.Client.Name</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="row g-3">
+            <div class="col-lg-4">
+                <div class="card card-outline card-success h-100">
+                    <div class="card-header">
+                        <h3 class="card-title">Client Snapshot</h3>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row mb-0 small">
+                            <dt class="col-5">Name</dt>
+                            <dd class="col-7">@Model.Client.Name</dd>
+                            <dt class="col-5">Phone</dt>
+                            <dd class="col-7">@Model.Client.Phone</dd>
+                            <dt class="col-5">NID</dt>
+                            <dd class="col-7">@Model.Client.NID</dd>
+                            <dt class="col-5">Vehicle</dt>
+                            <dd class="col-7">@Model.Client.VehicleType</dd>
+                            <dt class="col-5">Vehicle No.</dt>
+                            <dd class="col-7">@Model.Client.VehicleNumber</dd>
+                            <dt class="col-5">Balance</dt>
+                            <dd class="col-7 fw-semibold">@Model.Client.BalanceDisplay</dd>
+                            <dt class="col-5">Battery</dt>
+                            <dd class="col-7">@Model.Client.CurrentBatteryCode</dd>
+                            <dt class="col-5">Status</dt>
+                            <dd class="col-7">
+                                <span class="badge @(Model.Client.Status == "Active" ? "text-bg-success" : "text-bg-secondary")">
+                                    @Model.Client.Status
+                                </span>
+                            </dd>
+                            <dt class="col-5">Address</dt>
+                            <dd class="col-7">@Model.Client.Address</dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer d-flex gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.Client.Id" class="btn btn-outline-success btn-xs">Edit</a>
+                        <a asp-action="Recharge" asp-route-id="@Model.Client.Id" class="btn btn-outline-warning btn-xs">Recharge</a>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-xs">Back</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card card-outline card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title">Swap History</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover align-middle w-100 js-datatable" data-page-length="10" data-export-title="Client Swap History">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Station</th>
+                                        <th>Returned</th>
+                                        <th>Assigned</th>
+                                        <th>Cost</th>
+                                        <th>Processed By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.SwapHistory)
+                                    {
+                                        <tr>
+                                            <td>@item.SwapTime</td>
+                                            <td>@item.StationName</td>
+                                            <td>@item.ReturnedBatteryCode</td>
+                                            <td>@item.AssignedBatteryCode</td>
+                                            <td>@item.SwapCost</td>
+                                            <td>@item.ProcessedByEmployee</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

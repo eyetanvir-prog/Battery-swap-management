@@ -1,0 +1,214 @@
+@using Microsoft.AspNetCore.Http
+@{
+    var displayName = Context.Session.GetString("DisplayName");
+    var userRole = Context.Session.GetString("UserRole");
+    var isLoggedIn = !string.IsNullOrWhiteSpace(Context.Session.GetString("AuthToken"));
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BatterySwap</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-rc3/dist/css/adminlte.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.7/css/dataTables.bootstrap5.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.5/css/responsive.bootstrap5.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.5/css/buttons.bootstrap5.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <div class="app-wrapper">
+        <nav class="app-header navbar navbar-expand bg-body">
+            <div class="container-fluid">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="bi bi-list"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" asp-controller="Employee" asp-action="Index">Employees</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" asp-controller="Client" asp-action="Index">Clients</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" asp-controller="Station" asp-action="Index">Stations</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" asp-controller="Battery" asp-action="Index">Batteries</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" asp-controller="Map" asp-action="Index">Map</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" asp-controller="History" asp-action="Swaps">Swaps</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" asp-controller="History" asp-action="Recharges">Recharges</a>
+                    </li>
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" asp-controller="Reports" asp-action="Summary">Reports</a>
+                    </li>
+                    @if (string.Equals(userRole, "Employee", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <li class="nav-item d-none d-md-block">
+                            <a class="nav-link" asp-controller="Swap" asp-action="Process">Swap Desk</a>
+                        </li>
+                    }
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" href="http://localhost:8081" target="_blank" rel="noreferrer">API Swagger</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto align-items-center">
+                    @if (isLoggedIn)
+                    {
+                        <li class="nav-item me-3">
+                            <span class="small text-muted fw-semibold">@displayName</span>
+                            <span class="small text-muted">(@userRole)</span>
+                        </li>
+                        <li class="nav-item">
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-dark btn-sm">Logout</button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="btn btn-dark btn-sm" asp-controller="Account" asp-action="Login">Login</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+
+        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+            <div class="sidebar-brand">
+                <a asp-controller="Home" asp-action="Index" class="brand-link">
+                    <span class="brand-text fw-light">BatterySwap</span>
+                </a>
+            </div>
+            <div class="sidebar-wrapper">
+                <nav class="mt-2">
+                    <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
+                        <li class="nav-item">
+                            <a asp-controller="Dashboard" asp-action="Index" class="nav-link @(currentController == "Dashboard" ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-speedometer2"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Employee" asp-action="Index" class="nav-link @(currentController == "Employee" ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-person-workspace"></i>
+                                <p>Employees</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Client" asp-action="Index" class="nav-link @(currentController == "Client" ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-people-fill"></i>
+                                <p>Clients</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Station" asp-action="Index" class="nav-link @(currentController == "Station" ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-geo-alt-fill"></i>
+                                <p>Stations</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Battery" asp-action="Index" class="nav-link @(currentController == "Battery" ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-battery-half"></i>
+                                <p>Batteries</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Map" asp-action="Index" class="nav-link @(currentController == "Map" ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-map"></i>
+                                <p>Station Map</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="History" asp-action="Swaps" class="nav-link @(currentController == "History" && string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "Swaps", StringComparison.OrdinalIgnoreCase) ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-clock-history"></i>
+                                <p>Swap History</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="History" asp-action="Recharges" class="nav-link @(currentController == "History" && string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "Recharges", StringComparison.OrdinalIgnoreCase) ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-cash-coin"></i>
+                                <p>Recharge History</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Reports" asp-action="Summary" class="nav-link @(currentController == "Reports" ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-file-earmark-bar-graph"></i>
+                                <p>Reports</p>
+                            </a>
+                        </li>
+                        @if (string.Equals(userRole, "Employee", StringComparison.OrdinalIgnoreCase))
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Swap" asp-action="Process" class="nav-link @(currentController == "Swap" ? "active" : string.Empty)">
+                                    <i class="nav-icon bi bi-arrow-repeat"></i>
+                                    <p>Swap Desk</p>
+                                </a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a asp-controller="Account" asp-action="Login" class="nav-link @(currentController == "Account" ? "active" : string.Empty)">
+                                <i class="nav-icon bi bi-box-arrow-in-right"></i>
+                                <p>Account</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="http://localhost:8081" target="_blank" rel="noreferrer" class="nav-link">
+                                <i class="nav-icon bi bi-braces"></i>
+                                <p>Swagger API</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://adminlte.io/" target="_blank" rel="noreferrer" class="nav-link">
+                                <i class="nav-icon bi bi-window-stack"></i>
+                                <p>AdminLTE</p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="app-main">
+            @RenderBody()
+        </main>
+
+        <footer class="app-footer border-top">
+            <div class="float-end d-none d-sm-inline">AdminLTE 4 Starter</div>
+            <strong>Battery Swap Station Management System</strong>
+        </footer>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.7/js/dataTables.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/2.3.7/js/dataTables.bootstrap5.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.5/js/dataTables.responsive.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.5/js/responsive.bootstrap5.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.5/js/dataTables.buttons.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.5/js/buttons.bootstrap5.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.5/js/buttons.html5.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.5/js/buttons.print.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.5/js/buttons.colVis.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-rc3/dist/js/adminlte.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

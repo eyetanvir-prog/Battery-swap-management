@@ -1,0 +1,100 @@
+@model BatterySwap.MVC.Models.SwapHistoryListViewModel
+@{
+    ViewData["Title"] = "Swap History";
+    var totalSwaps = Model.Items.Count;
+    var totalRevenue = Model.Items.Sum(x =>
+    {
+        var raw = x.SwapCost.Replace(" Tk", string.Empty, StringComparison.OrdinalIgnoreCase);
+        return decimal.TryParse(raw, out var value) ? value : 0m;
+    });
+    var activeStations = Model.Items.Select(x => x.StationName).Distinct(StringComparer.OrdinalIgnoreCase).Count();
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Swap History</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Swap History</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <div class="small-box text-bg-danger">
+                    <div class="inner">
+                        <h3>@totalSwaps</h3>
+                        <p>Total Swaps</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-box text-bg-dark">
+                    <div class="inner">
+                        <h3>@totalRevenue.ToString("0.##")</h3>
+                        <p>Swap Revenue (Tk)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="small-box text-bg-secondary">
+                    <div class="inner">
+                        <h3>@activeStations</h3>
+                        <p>Stations Involved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-outline card-danger">
+            <div class="card-header">
+                <h3 class="card-title">Swap Transactions</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="swapHistoryTable" class="table table-hover table-sm align-middle w-100 js-datatable" data-page-length="10" data-export-title="Swap History">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Phone</th>
+                                <th>Station</th>
+                                <th>Returned</th>
+                                <th>Assigned</th>
+                                <th>Cost</th>
+                                <th>Time</th>
+                                <th>Processed By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">
+                                        <a asp-controller="Client" asp-action="Profile" asp-route-id="@item.ClientId" class="text-reset text-decoration-none">
+                                            @item.ClientName
+                                        </a>
+                                    </td>
+                                    <td>@item.ClientPhone</td>
+                                    <td>@item.StationName</td>
+                                    <td>@item.ReturnedBatteryCode</td>
+                                    <td>@item.AssignedBatteryCode</td>
+                                    <td>@item.SwapCost</td>
+                                    <td>@item.SwapTime</td>
+                                    <td>@item.ProcessedByEmployee</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

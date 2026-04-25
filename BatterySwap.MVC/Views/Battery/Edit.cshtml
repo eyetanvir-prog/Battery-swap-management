@@ -1,0 +1,98 @@
+@model BatterySwap.MVC.Models.EditBatteryViewModel
+@{
+    ViewData["Title"] = "Edit Battery";
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="mb-0">Edit Battery</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Battery" asp-action="Index">Batteries</a></li>
+                    <li class="breadcrumb-item active">Edit</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="card card-outline card-secondary">
+                    <div class="card-header">
+                        <h3 class="card-title">Battery Details</h3>
+                    </div>
+                    <div class="card-body">
+                        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                        {
+                            <div class="alert alert-danger py-2">@Model.ErrorMessage</div>
+                        }
+
+                        <div class="alert alert-light border py-2">
+                            Status: <strong>@Model.Status</strong> |
+                            Holder: <strong>@Model.CurrentClientName</strong> |
+                            Updated: <strong>@Model.LastUpdated</strong>
+                        </div>
+
+                        @if (Model.IsAssignedToClient)
+                        {
+                            <div class="alert alert-warning py-2">
+                                This battery is currently with a client, so its station assignment cannot be changed until it is returned through a swap.
+                            </div>
+                        }
+
+                        <form asp-action="Edit" method="post">
+                            @Html.AntiForgeryToken()
+                            <input asp-for="Id" type="hidden" />
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label asp-for="BatteryCode" class="form-label"></label>
+                                    <input asp-for="BatteryCode" class="form-control" />
+                                    <span asp-validation-for="BatteryCode" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="StationId" class="form-label"></label>
+                                    @if (Model.IsAssignedToClient)
+                                    {
+                                        <select asp-for="StationId" class="form-select" disabled>
+                                            @foreach (var station in Model.Stations)
+                                            {
+                                                <option value="@station.Id">@station.Label</option>
+                                            }
+                                        </select>
+                                        <input asp-for="StationId" type="hidden" />
+                                    }
+                                    else
+                                    {
+                                        <select asp-for="StationId" class="form-select">
+                                            <option value="">Select a station</option>
+                                            @foreach (var station in Model.Stations)
+                                            {
+                                                <option value="@station.Id">@station.Label</option>
+                                            }
+                                        </select>
+                                    }
+                                    <span asp-validation-for="StationId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="mt-4 d-flex gap-2">
+                                <button type="submit" class="btn btn-secondary">Save Changes</button>
+                                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

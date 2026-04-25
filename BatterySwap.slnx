@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BatterySwap.API/BatterySwap.API.csproj" />
+  <Project Path="BatterySwap.MVC/BatterySwap.MVC.csproj" />
+  <Project Path="BatterySwap.Shared/BatterySwap.Shared.csproj" />
+</Solution>
