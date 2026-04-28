@@ -412,6 +412,7 @@ Good talking points:
 - main specification: `docs/ProjectSpecification.md`
 - architecture overview: `docs/Architecture.md`
 - demo walkthrough: `docs/DemoGuide.md`
+- mac setup guide: `docs/MacSetup.md`
 
 ## Notes
 
